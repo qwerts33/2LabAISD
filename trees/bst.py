@@ -26,7 +26,6 @@ class Node:
             return self.search(root.right, key)
 
     def findmin(self, root):
-        """Находит узел с минимальным ключом в поддереве"""
         if root is None:
             return None
         current = root
@@ -35,7 +34,6 @@ class Node:
         return current
 
     def findmax(self, root):
-        """Находит узел с максимальным ключом в поддереве"""
         if root is None:
             return None
         current = root
@@ -52,7 +50,6 @@ class Node:
         elif key > root.key:
             root.right = self.delete(root.right, key)
         else:
-            # Нашли узел для удаления
             if root.left is None and root.right is None:
                 # Узел без детей
                 return None
@@ -68,12 +65,9 @@ class Node:
                 return root.left
             else:
                 # Узел с двумя детьми
-                # Находим минимальный узел в правом поддереве
                 min_node = self.findmin(root.right)
                 if min_node:
-                    # Копируем значение минимального узла
                     root.key = min_node.key
-                    # Удаляем минимальный узел из правого поддерева
                     root.right = self.delete(root.right, min_node.key)
                 else:
                     # Если правого поддерева нет, используем максимальный из левого
@@ -85,7 +79,6 @@ class Node:
         return root
 
     def inorder(self, root, result=None):
-        """Исправленный inorder, который возвращает список"""
         if result is None:
             result = []
         if root is not None:
@@ -95,7 +88,6 @@ class Node:
         return result
 
     def preorder(self, root, result=None):
-        """Preorder с возвратом результата"""
         if result is None:
             result = []
         if root is not None:
@@ -105,7 +97,6 @@ class Node:
         return result
 
     def postorder(self, root, result=None):
-        """Postorder с возвратом результата"""
         if result is None:
             result = []
         if root is not None:
@@ -115,7 +106,6 @@ class Node:
         return result
 
     def bfs(self, root):
-        """BFS, который возвращает список"""
         result = []
         if root is None:
             return result
@@ -130,7 +120,6 @@ class Node:
         return result
 
     def height(self, root):
-        """Вычисление высоты дерева"""
         if root is None:
             return -1
         left_height = self.height(root.left)
@@ -138,37 +127,25 @@ class Node:
         return 1 + max(left_height, right_height)
 
     def print_tree_visual(self, root, level=0, prefix="Root: "):
-        """Визуализация дерева (корень сверху)"""
         if root is None:
             print("Дерево пустое")
             return
-
-        # Сначала выводим правую ветку (она будет слева в выводе)
         if root.right:
             self.print_tree_visual(root.right, level + 1, "┌── ")
 
-        # Выводим текущий узел
         indent = "    " * level
         print(indent + prefix + str(root.key))
-
-        # Затем выводим левую ветку
         if root.left:
             self.print_tree_visual(root.left, level + 1, "└── ")
 
 
 def test_bst():
-    """Тестирование обычного бинарного дерева поиска"""
     print("=" * 50)
     print("ТЕСТ ОБЫЧНОГО BST ДЕРЕВА")
     print("=" * 50)
 
-    # Создаем экземпляр для вызова методов
     bst = Node(0)
-
-    # Начинаем с пустого дерева
     root = None
-
-    # Вставка элементов
     test_keys = [50, 30, 70, 20, 40, 60, 80, 10, 90]
     print("1. Вставляем элементы:", test_keys)
 
@@ -178,24 +155,19 @@ def test_bst():
         height = bst.height(root)
         print(f" - высота дерева: {height}")
 
-    # Проверка обходов
     print("\n2. Проверка обходов:")
 
-    # Inorder обход
     inorder_result = bst.inorder(root)
     print("   Inorder (должен быть отсортирован):", inorder_result)
 
-    # Проверка отсортированности
     if inorder_result == sorted(inorder_result):
-        print("   ✓ Дерево корректно отсортировано")
+        print("    Дерево корректно отсортировано")
     else:
-        print("   ✗ Нарушена сортировка дерева")
+        print("    Нарушена сортировка дерева")
 
-    # BFS обход
     bfs_result = bst.bfs(root)
     print("   BFS (по уровням):", bfs_result)
 
-    # Проверка поиска
     print("\n3. Тест поиска:")
     search_tests = [
         (30, "существующий в левом поддереве"),
@@ -203,7 +175,6 @@ def test_bst():
         (55, "несуществующий"),
         (90, "существующий лист")
     ]
-
     for key, description in search_tests:
         result = bst.search(root, key)
         if result:
@@ -211,35 +182,28 @@ def test_bst():
         else:
             print(f"   Ключ {key} ({description}) не найден")
 
-    # Высота дерева
     print(f"\n4. Высота дерева: {bst.height(root)}")
 
-    # Визуализация дерева
     print("\n5. Визуализация дерева:")
     bst.print_tree_visual(root)
 
-    # Тест удаления
     print("\n6. Тест удаления:")
 
-    # Удаляем лист
     print("   Удаляем лист 10:")
     root = bst.delete(root, 10)
     print(f"   Inorder после удаления: {bst.inorder(root)}")
     print(f"   Высота после удаления 10: {bst.height(root)}")
 
-    # Удаляем узел с одним ребенком
     print("\n   Удаляем узел с одним ребенком 20:")
     root = bst.delete(root, 20)
     print(f"   Inorder после удаления: {bst.inorder(root)}")
     print(f"   Высота после удаления 20: {bst.height(root)}")
 
-    # Удаляем узел с двумя детьми
     print("\n   Удаляем узел с двумя детьми 50 (корень):")
     root = bst.delete(root, 50)
     print(f"   Inorder после удаления: {bst.inorder(root)}")
     print(f"   Высота после удаления 50: {bst.height(root)}")
 
-    # Проверяем поиск после удаления
     print("\n7. Проверка поиска после удаления:")
     for key in [50, 30, 60, 10]:
         result = bst.search(root, key)
