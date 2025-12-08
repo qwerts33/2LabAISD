@@ -11,21 +11,10 @@ class Node:
     def insert(self, root, key):
         if root is None:
             return Node(key)
-        cur = root
-        parent = None
-        while cur is not None:
-            parent = cur
-            if key < cur.key:
-                cur = cur.left
-            elif key > cur.key:
-                cur = cur.right
-            else:
-                return root
-        new_node = Node(key, parent)
-        if key < parent.key:
-            parent.left = new_node
-        else:
-            parent.right = new_node
+        elif key < root.key:
+            root.left = self.insert(root.left, key)
+        elif key > root.key:
+            root.right = self.insert(root.right, key)
         return root
 
     def search(self, root, key):
